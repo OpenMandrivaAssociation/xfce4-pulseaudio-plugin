@@ -1,8 +1,5 @@
 %define url_ver	%(echo %{version} | cut -d. -f1,2)
 
-# exclude plugin .so from provides
-%global __provides_exclude_from %{_libdir}/xfce4/panel/plugins/.*\\.so
-
 Summary:	A panel plugin for controlling PulseAudio mixer
 Name:		xfce4-pulseaudio-plugin
 Version:	0.2.1
@@ -33,6 +30,8 @@ output volume of the PulseAudio mixer.
 %apply_patches
 
 %build
+%define _disable_ld_no_undefined 1
+
 %configure
 %make
 

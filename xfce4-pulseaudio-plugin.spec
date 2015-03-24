@@ -16,6 +16,7 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(libxfce4util-1.0)
 BuildRequires:	pkgconfig(libxfce4ui-2) >= 4.12.0
 BuildRequires:	pkgconfig(libxfce4panel-2.0) >= 4.12.0
+BuildRequires:	pkgconfig(keybinder)
 Requires:	xfce4-panel >= 4.11.0
 Requires:	pavucontrol
 # Replaces xfce4-mixer

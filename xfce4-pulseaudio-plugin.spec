@@ -32,8 +32,6 @@ output volume of the PulseAudio mixer.
 
 %build
 %define _disable_ld_no_undefined 1
-export CC=gcc
-export CXX=g++
 
 %configure
 %make

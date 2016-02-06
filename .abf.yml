@@ -1,3 +1,4 @@
----
-sources:
+removed_sources:
   xfce4-pulseaudio-plugin-0.2.1.tar.bz2: d1ea295343645c461e284a5740d69385ca359d9b
+sources:
+  xfce4-pulseaudio-plugin-0.2.4.tar.bz2: d7d3752d0e25fd6af059858af392899afb8b5801

@@ -1,0 +1,106 @@
+From 6431653f1343e4ec1c1a7b7f35cabe804f03c097 Mon Sep 17 00:00:00 2001
+From: Andrzej <ndrwrdck@gmail.com>
+Date: Tue, 17 Nov 2015 22:28:12 +0000
+Subject: [PATCH] Do not show notifications at start up (bug #12313)
+
+---
+ panel-plugin/pulseaudio-button.c |  1 +
+ panel-plugin/pulseaudio-notify.c |  4 +++-
+ panel-plugin/pulseaudio-volume.c | 14 +++++++-------
+ 3 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/panel-plugin/pulseaudio-button.c b/panel-plugin/pulseaudio-button.c
+index a8dc676..e0464df 100644
+--- a/panel-plugin/pulseaudio-button.c
++++ b/panel-plugin/pulseaudio-button.c
+@@ -366,6 +366,7 @@ pulseaudio_button_set_size (PulseaudioButton *button,
+ 
+ static void
+ pulseaudio_button_volume_changed (PulseaudioButton  *button,
++                                  gboolean           should_notify,
+                                   PulseaudioVolume  *volume)
+ {
+   g_return_if_fail (IS_PULSEAUDIO_BUTTON (button));
+diff --git a/panel-plugin/pulseaudio-notify.c b/panel-plugin/pulseaudio-notify.c
+index c1120a8..0620221 100644
+--- a/panel-plugin/pulseaudio-notify.c
++++ b/panel-plugin/pulseaudio-notify.c
+@@ -215,11 +215,13 @@ pulseaudio_notify_notify (PulseaudioNotify *notify)
+ 
+ static void
+ pulseaudio_notify_volume_changed (PulseaudioNotify  *notify,
++                                  gboolean           should_notify,
+                                   PulseaudioVolume  *volume)
+ {
+   g_return_if_fail (IS_PULSEAUDIO_NOTIFY (notify));
+ 
+-  pulseaudio_notify_notify (notify);
++  if (should_notify)
++    pulseaudio_notify_notify (notify);
+ }
+ 
+ 
+diff --git a/panel-plugin/pulseaudio-volume.c b/panel-plugin/pulseaudio-volume.c
+index 7c38093..994e68c 100644
+--- a/panel-plugin/pulseaudio-volume.c
++++ b/panel-plugin/pulseaudio-volume.c
+@@ -99,8 +99,8 @@ pulseaudio_volume_class_init (PulseaudioVolumeClass *klass)
+                   G_TYPE_FROM_CLASS (gobject_class),
+                   G_SIGNAL_RUN_LAST,
+                   0, NULL, NULL,
+-                  g_cclosure_marshal_VOID__VOID,
+-                  G_TYPE_NONE, 0);
++                  g_cclosure_marshal_VOID__BOOLEAN,
++                  G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+ 
+ }
+ 
+@@ -157,14 +157,14 @@ pulseaudio_volume_sink_info_cb (pa_context         *context,
+     {
+       pulseaudio_debug ("Updated Mute: %d -> %d", volume->muted, muted);
+       volume->muted = muted;
+-      g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0);
++      g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0, FALSE);
+     }
+ 
+   if (ABS (volume->volume - vol) > 2e-3)
+     {
+       pulseaudio_debug ("Updated Volume: %04.3f -> %04.3f", volume->volume, vol);
+       volume->volume = vol;
+-      g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0);
++      g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0, FALSE);
+     }
+   pulseaudio_debug ("volume: %f, muted: %d", vol, muted);
+ }
+@@ -246,17 +246,17 @@ pulseaudio_volume_context_state_cb (pa_context *context,
+       volume->connected = TRUE;
+       // Check current sink volume manually. PA sink events usually not emitted.
+       pulseaudio_volume_sink_check (volume, context);
+-      g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0);
++      g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0, FALSE);
+       break;
+ 
+     case PA_CONTEXT_FAILED       :
+     case PA_CONTEXT_TERMINATED   :
+       g_warning ("Disconected from the PulseAudio server. Attempting to reconnect in 5 seconds.");
+       volume->pa_context = NULL;
+       volume->connected = FALSE;
+       volume->volume = 0.0;
+       volume->muted = FALSE;
+-      g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0);
++      g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0, FALSE);
+       if (volume->reconnect_timer_id == 0)
+         volume->reconnect_timer_id = g_timeout_add_seconds
+           (5, pulseaudio_volume_reconnect_timeout, volume);
+@@ -398,7 +398,7 @@ pulseaudio_volume_sink_volume_changed (pa_context *context,
+   PulseaudioVolume *volume = PULSEAUDIO_VOLUME (userdata);
+ 
+   if (success)
+-    g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0);
++    g_signal_emit (G_OBJECT (volume), pulseaudio_volume_signals [VOLUME_CHANGED], 0, TRUE);
+ }
+ 
+ /* mute setting callbacks */
+--
+libgit2 0.23.2
+

@@ -3,12 +3,14 @@
 
 Summary:	A panel plugin for controlling PulseAudio mixer
 Name:		xfce4-pulseaudio-plugin
-Version:	0.2.1
+Version:	0.2.4
 Release:	1
 License:	GPLv2+
 Group:		Graphical desktop/Xfce
 Url:		http://goodies.xfce.org/projects/panel-plugins/xfce4-pulseaudio-plugin
 Source0:	http://archive.xfce.org/src/panel-plugins/%{name}/%{url_ver}/%{name}-%{version}.tar.bz2
+Patch1:		0001-Do-not-show-notifications-at-start-up-bug-12313.patch
+Patch2:		0002-Fixed-crash-caused-by-commit-6431653.patch
 BuildRequires:	xfce4-dev-tools >= 4.12
 BuildRequires:	intltool
 BuildRequires:	pkgconfig(x11)
@@ -47,4 +49,5 @@ find %{buildroot} -name "*.la" -delete
 %doc NEWS README
 %{_libdir}/xfce4/panel/plugins/libpulseaudio-plugin.so
 %{_iconsdir}/hicolor/*/apps/%{name}.*
+%{_iconsdir}/hicolor/*/status/*.svg
 %{_datadir}/xfce4/panel/plugins/pulseaudio.desktop

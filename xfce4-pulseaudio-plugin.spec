@@ -1,4 +1,5 @@
 %define url_ver	%(echo %{version} | cut -d. -f1,2)
+%define _disable_rebuild_configure 1
 
 Summary:	A panel plugin for controlling PulseAudio mixer
 Name:		xfce4-pulseaudio-plugin

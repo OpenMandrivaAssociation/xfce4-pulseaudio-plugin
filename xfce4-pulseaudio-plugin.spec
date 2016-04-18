@@ -36,7 +36,7 @@ output volume of the PulseAudio mixer.
 %build
 %define _disable_ld_no_undefined 1
 
-%configure
+%configure2_5x
 %make
 
 %install

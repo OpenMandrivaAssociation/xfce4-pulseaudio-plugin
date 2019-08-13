@@ -27,7 +27,7 @@ BuildRequires:	pkgconfig(keybinder)
 Requires:	xfce4-panel >= 4.11.0
 Requires:	pavucontrol
 # Replaces xfce4-mixer
-%rename		xfce4-mixer < 4.11.0-3
+Obsoletes:	xfce4-mixer < 4.11.0-5
 
 %description
 Xfce4-pulseaudio-plugin is a panel plugin for controlling an audio

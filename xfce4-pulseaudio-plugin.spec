@@ -35,7 +35,7 @@ output volume of the PulseAudio mixer.
 
 %prep
 %setup -q
-%apply_patches
+%autopatch -p1
 
 %build
 %define _disable_ld_no_undefined 1

@@ -52,7 +52,7 @@ find %{buildroot} -name "*.la" -delete
 %find_lang %{name}
 
 %files -f %{name}.lang
-%doc NEWS README
+%doc NEWS README*
 %{_libdir}/xfce4/panel/plugins/libpulseaudio-plugin.so
 %{_iconsdir}/hicolor/*/apps/%{name}.*
 %{_iconsdir}/hicolor/*/status/*.svg

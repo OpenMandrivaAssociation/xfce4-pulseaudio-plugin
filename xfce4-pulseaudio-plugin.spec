@@ -3,8 +3,8 @@
 
 Summary:	A panel plugin for controlling PulseAudio mixer
 Name:		xfce4-pulseaudio-plugin
-Version:	0.4.4
-Release:	2
+Version:	0.4.5
+Release:	1
 License:	GPLv2+
 Group:		Graphical desktop/Xfce
 Url:		http://goodies.xfce.org/projects/panel-plugins/xfce4-pulseaudio-plugin
@@ -29,11 +29,6 @@ Requires:	pavucontrol
 # Replaces xfce4-mixer
 Obsoletes:	xfce4-mixer < 4.11.0-5
 
-# BrokenDriva
-# Add simple but very dirty, dirty and again dirty, broken workaround which should never have occurred.
-# pavucontrol bin was renamed to pavucontrol-gtk thats why plugin can;t find binary while pavucontrol-qt bin was renamed to pavucontrol.
-# I know it's wrong and no one shouldn't mix qt with xfce but for now I can't find better solution until it gets fixed properly.
-Requires: pavucontrol-qt
 
 %description
 Xfce4-pulseaudio-plugin is a panel plugin for controlling an audio

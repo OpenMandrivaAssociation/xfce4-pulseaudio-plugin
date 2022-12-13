@@ -4,7 +4,7 @@
 Summary:	A panel plugin for controlling PulseAudio mixer
 Name:		xfce4-pulseaudio-plugin
 Version:	0.4.5
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Graphical desktop/Xfce
 Url:		http://goodies.xfce.org/projects/panel-plugins/xfce4-pulseaudio-plugin

@@ -3,16 +3,13 @@
 
 Summary:	A panel plugin for controlling PulseAudio mixer
 Name:		xfce4-pulseaudio-plugin
-Version:	0.4.9
+Version:	0.5.1
 Release:	1
 License:	GPLv2+
 Group:		Graphical desktop/Xfce
 Url:		https://goodies.xfce.org/projects/panel-plugins/xfce4-pulseaudio-plugin
 Source0:	https://archive.xfce.org/src/panel-plugins/%{name}/%{url_ver}/%{name}-%{version}.tar.bz2
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	libtool-base
-BuildRequires:	slibtool
+BuildRequires:	meson
 BuildRequires:	make
 BuildRequires:	xfce4-dev-tools >= 4.12
 BuildRequires:	intltool
@@ -21,9 +18,11 @@ BuildRequires:	pkgconfig(exo-2)
 BuildRequires:	pkgconfig(gio-2.0)
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(libcanberra-gtk3)
 BuildRequires:	pkgconfig(libnotify)
 BuildRequires:	pkgconfig(libpulse-mainloop-glib)
 BuildRequires:	pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(libxfce4windowing-0)
 BuildRequires:	pkgconfig(libxfce4util-1.0)
 BuildRequires:	pkgconfig(libxfce4ui-2)
 BuildRequires:	pkgconfig(libxfce4panel-2.0)
@@ -40,17 +39,22 @@ Xfce4-pulseaudio-plugin is a panel plugin for controlling an audio
 output volume of the PulseAudio mixer.
 
 %prep
-%setup -q
-%autopatch -p1
+%autosetup -p1
 
 %build
 %define _disable_ld_no_undefined 1
 
-%configure
-%make_build
+%meson	\
+	-Dkeybinder=enabled \
+	-Dlibnotify=enabled \
+	-Dlibcanberra=enabled \
+	-Dlibxfce4windowing=enabled \
+	-Dmpris2=enabled \
+	-Dmixer-command=pavucontrol
+%meson_build
 
 %install
-%make_install
+%meson_install
 
 # we don't want these
 find %{buildroot} -name "*.la" -delete
